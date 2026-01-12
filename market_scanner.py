@@ -3,18 +3,14 @@
 Polls selected Polymarket event URLs every 10 minutes and appends
 market data to CSV.
 """
-
-import json
 import time
-from utils.config import REALTIME_EVENTS, SCANNER_POLL_INTERVAL
+from utils.config import SCANNER_POLL_INTERVAL
 from utils.request_util import get_markets
 from utils.csv_util import append_csv, format_central
 
 
 def get_market_data():
     """Fetch and process market data for all selected events."""
-
-    
     event_list = get_markets()
     
     if not event_list:
@@ -33,6 +29,8 @@ def get_market_data():
             volume = submarket.get("volume", "0.0")
             volume = f"${int(float(volume))}"
             registered = event.get("startDate", "")
+
+            # Date format inconsisten, wrap in try catch to avoid raise
             try:
                 registered_fmt = format_central(registered)
             except Exception:
@@ -42,6 +40,7 @@ def get_market_data():
                 resolved_fmt = format_central(resolved)
             except Exception:
                 resolved_fmt = resolved
+
             append_csv("market_list", [{
                 "market_id": market_id,
                 "market_title": market_title,

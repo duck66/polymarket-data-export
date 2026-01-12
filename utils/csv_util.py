@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from utils.config import DATA_DIR
+from utils.config import DATA_DIR, TIMEZONE, DATE_FORMAT
 
 REALTIME_ODDS_FIELDS = [
     "market_id",
@@ -53,16 +53,18 @@ def append_csv(program, rows):
 
 
 def now_central():
-    return datetime.now(ZoneInfo("America/Chicago")).strftime(
-        "%Y-%m-%d %H:%M:%S"
+    """Get current time in Central timezone formatted as string."""
+    return datetime.now(ZoneInfo(TIMEZONE)).strftime(
+        DATE_FORMAT
     )
 
 
 def format_central(iso_str: str) -> str:
+    """Format ISO datetime string to Central timezone."""
     if not iso_str:
         return ""
 
     dt = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
-    dt_central = dt.astimezone(ZoneInfo("America/Chicago"))
+    dt_central = dt.astimezone(ZoneInfo(TIMEZONE))
 
-    return dt_central.strftime("%Y-%m-%d %H:%M:%S")
+    return dt_central.strftime(DATE_FORMAT)

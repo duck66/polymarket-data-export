@@ -1,6 +1,9 @@
-# Example configuration for Polymarket Odds Tracker
+# Base configuration for Polymarket Odds Tracker
 
+TIMEZONE="America/Chicago"
 BASE_URL="https://gamma-api.polymarket.com"
+DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+
 # Data directory for CSV output files
 DATA_DIR="output"
 

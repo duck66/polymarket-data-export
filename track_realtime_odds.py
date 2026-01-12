@@ -8,6 +8,7 @@ import json
 import time
 import sys
 from utils.request_util import get_events_by_slug
+from utils.csv_util import append_csv
 from utils.config import REALTIME_EVENTS, REALTIME_POLL_INTERVAL
 
 
@@ -39,7 +40,14 @@ def track_event_odds(event_slug: str) -> None:
         first = float(oods[0])
 
         # ROunded so it have same value as the one listed on Polymarket site
-        percentage = round(first * 100) 
+        percentage = round(first * 100)
+        append_csv([{
+            "market_id": market_id,
+            "market_title": market_title,
+            "submarket_id": submarket_id,
+            "submarket_title": submarket_title,
+            "chance": percentage,
+        }])
         print(f"Market ID: {market_id}, Market Title: {market_title}, Submarket ID: {submarket_id}, Submarket Title: {submarket_title} (ID: {submarket_id}), Odds: {percentage:.2f}%")
 
 def main():

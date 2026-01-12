@@ -9,8 +9,8 @@ DATA_DIR="output"
 # Example event slugs - replace with actual Polymarket event slugs
 REALTIME_EVENTS="jerome-powell-out-as-fed-chair-by,khamenei-out-as-supreme-leader-of-iran-by-january-31"
 
-# Poll interval in seconds (default: 1)
-REALTIME_POLL_INTERVAL=1
+# Poll interval in seconds (default: 5)
+REALTIME_POLL_INTERVAL=5
 
 # Program 2: Market Scanner
 # Scan interval in seconds (default: 600 = 10 minutes)

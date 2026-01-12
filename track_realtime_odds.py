@@ -6,9 +6,9 @@ real-time odds ("chance") to CSV.
 
 import json
 import time
-import requests
 import sys
-from utils.config import REALTIME_EVENTS, REALTIME_POLL_INTERVAL, SCANNER_POLL_INTERVAL, API_TIMEOUT
+from utils.request_util import get_events_by_slug
+from utils.config import REALTIME_EVENTS, REALTIME_POLL_INTERVAL
 
 
 def track_event_odds(event_slug: str) -> None:
@@ -17,13 +17,8 @@ def track_event_odds(event_slug: str) -> None:
     Args:
         event_slug: Event slug to track
     """
-    # event = client.get_event(event_slug)
-    print(f"\nFetching odds for event: {event_slug}")
-    url = f"https://gamma-api.polymarket.com/events/slug/{event_slug}"
-
-    r = requests.get(url)
-    r.raise_for_status()
-    event = r.json()
+    
+    event = get_events_by_slug(event_slug)
 
     if not event:
         print(f"Could not fetch event: {event_slug}")
@@ -37,10 +32,13 @@ def track_event_odds(event_slug: str) -> None:
     for submarket in markets:
         submarket_id = submarket.get("id", "")
         submarket_title = submarket.get("groupItemTitle") or "No Submarket"
+
+        # Chance/Odds stored on first index of outcomePrices value
         oods = submarket.get("outcomePrices", "[]")
         oods = json.loads(oods)
         first = float(oods[0])
 
+        # ROunded so it have same value as the one listed on Polymarket site
         percentage = round(first * 100) 
         print(f"Market ID: {market_id}, Market Title: {market_title}, Submarket ID: {submarket_id}, Submarket Title: {submarket_title} (ID: {submarket_id}), Odds: {percentage:.2f}%")
 
@@ -48,7 +46,6 @@ def main():
     """Main entry point for real-time odds tracker."""
     print("=== Polymarket Real-Time Odds Tracker ===")
     
-    # event_slugs = Config.get_realtime_events()
     event_slugs = REALTIME_EVENTS.split(",")
 
     try:

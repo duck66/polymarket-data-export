@@ -1,8 +1,8 @@
 # Example configuration for Polymarket Odds Tracker
-# Copy this file to .env or export these variables in your shell
 
+BASE_URL="https://gamma-api.polymarket.com"
 # Data directory for CSV output files
-# DATA_DIR=data
+DATA_DIR="output"
 
 # Program 1: Real-time Odds Tracker
 # Comma-separated list of event slugs to track

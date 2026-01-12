@@ -1,5 +1,7 @@
 import csv
 import os
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from utils.config import DATA_DIR
 
@@ -8,7 +10,8 @@ CSV_FIELDS = [
     "market_title",
     "submarket_id",
     "submarket_title",
-    "chance",
+    "time",
+    "chance"
 ]
 
 CSV_FILE = "output/realtime_odds.csv"
@@ -25,3 +28,9 @@ def append_csv(rows):
             writer.writeheader()
 
         writer.writerows(rows)
+
+
+def now_central():
+    return datetime.now(ZoneInfo("America/Chicago")).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )

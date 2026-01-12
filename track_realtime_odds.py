@@ -41,7 +41,7 @@ def track_event_odds(event_slug: str) -> None:
 
         # ROunded so it have same value as the one listed on Polymarket site
         percentage = round(first * 100)
-        append_csv([{
+        append_csv("realtime_odds", [{
             "market_id": market_id,
             "market_title": market_title,
             "submarket_id": submarket_id,

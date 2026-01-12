@@ -11,6 +11,7 @@ pip install -r requirements.txt
 
 ### Program 1: Real-Time Odds Tracker
 **Purpose:** Track specific events with 5s polling
+#### Note: Update slugs list under /utils/config.py to your targetted slug, separated by comma(,)
 
 ```bash
 # Run

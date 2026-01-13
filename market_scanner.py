@@ -5,13 +5,14 @@ market data to CSV.
 """
 import time
 from utils.config import SCANNER_POLL_INTERVAL
-from utils.request_util import get_markets
+from utils.request_util import get_markets, fetch_all_markets, save_cache
 from utils.csv_util import append_csv, format_central
 
 
 def get_market_data():
     """Fetch and process market data for all selected events."""
-    event_list = get_markets()
+    event_list = fetch_all_markets()
+    save_cache(event_list)
     
     if not event_list:
         print(f"Could not fetch event")
@@ -22,6 +23,7 @@ def get_market_data():
         market_id = event.get("id", "")
         market_title = event.get("title", "N/A")
         markets = event.get("markets", [])
+        # print(f"[Scanner] Processing Market ID: {market_id}, Market Title: {market_title}, Submarkets: {len(markets)}")
         
         for submarket in markets:
             submarket_id = submarket.get("id", "")
@@ -51,7 +53,7 @@ def get_market_data():
                 "volume": volume
             }])
             
-            print(f"[Scanner] Market ID: {market_id}, Market Title: {market_title}, Submarket ID: {submarket_id}, Submarket Title: {submarket_title}, Registered: {registered_fmt}, Resolved: {resolved_fmt}, Volume: {volume}")
+            # print(f"[Scanner] Market ID: {market_id}, Market Title: {market_title}, Submarket ID: {submarket_id}, Submarket Title: {submarket_title}, Registered: {registered_fmt}, Resolved: {resolved_fmt}, Volume: {volume}")
 
 
 def main():

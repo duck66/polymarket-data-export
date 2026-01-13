@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import requests
 from utils.config import BASE_URL, API_TIMEOUT
 
@@ -26,24 +27,30 @@ def fetch_all_markets():
 
     while True:
         print(f"Fetching markets: offset={offset}, limit={limit}")
-        resp = requests.get(
-            f"{BASE_URL}/events",
-            params={
-                "order": "id",
-                "ascending": "true",
-                "limit": limit,
-                "offset": offset,
-            },
-            timeout=20
-        )
-        resp.raise_for_status()
-        data = resp.json()
+        try:
+            resp = requests.get(
+                f"{BASE_URL}/events",
+                params={
+                    "order": "id",
+                    "ascending": "true",
+                    "limit": limit,
+                    "offset": offset,
+                    # "end_date_min": "2026-01-01" # Example filter to get future markets only, but didnt work as expected for now
+                },
+                timeout=20
+            )
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            print(f"Error fetching markets: {e}...")
+            break
 
         if not data:
             break
         print(f"Fetched new {len(data)} markets, total {len(all_markets) + len(data)}")
 
         all_markets.extend(data)
+        time.sleep(1) # To avoid hitting rate limits
         offset += limit
 
     return all_markets
